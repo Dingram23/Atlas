@@ -82,9 +82,6 @@ Some of the packages we used (for installation):
 
 For our frontend, we used [netlify](https://www.netlify.com).
 
-![game_prog](https://user-images.githubusercontent.com/56037686/129882236-2e1804f1-03f0-4c8e-9eaa-366cbc4cc99e.PNG)
-![game_prog](https://user-images.githubusercontent.com/56037686/129882258-b918f8a4-05d1-4319-b372-9473e80b1127.PNG)
-
 ## Extra: What if we had more time?
 
 - Implement user to user gaming experience (i.e. on one device)
