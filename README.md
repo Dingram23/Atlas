@@ -1,38 +1,46 @@
 # Atlas :earth_africa:: Group Project
 
-In the final two weeks of the Sigma Labs traning, students were assigned to various group projects, one of which was the Atlas project. The Atlas team consisted of five members: David Ingram, Guy Hotchin, Joanna Hawthorne, Michael Baugh and Omid Wakili. 
+In the final two weeks of the Sigma Labs training, students were assigned to various group projects, one of which was the Atlas project. The Atlas team consisted of five members: David Ingram, Guy Hotchin, Joanna Hawthorne, Michael Baugh and Omid Wakili. 
 
-Our motivation behind the project was to build an enjoyable game, which would challenge the player's knowledge of the countries of the world.
+Our motivation behind the project was to build an enjoyable game that would challenge the player's knowledge and memory of the countries of the world.
 
-### How does the game work?
+### What are the game rules?
 
-In its simplest form, between two players, player 1 is presented with a random letter of the alphabet. Player 1 has to name a country beginning with that letter. Player 2, in turn, has to name a country, which begins with the final letter of player 1's response. The two players then continue, in turn, each one naming another country beginning with the other's last letter. Failure to name a country results in loss of a player. 
+![game_inst](https://user-images.githubusercontent.com/56037686/129879420-3e956025-a33a-40f3-a419-afae5bd9e2e0.PNG)
 
-In our first implementation, the user would be playing against the computer. The user would gain points for every correct country they can name, and they would lose if they fail to do so. The user could play as a guest, or sign up and login. As a logged in user, the player can keep track of their previous scores in a personal scoreboard. There is also a global scoreboard keeping track of the scores of all players on the site. 
+The player is presented with a random letter of the alphabet (except 'X') and needs to type in a country beginning with that letter. If they are correct, they earn some points.
 
-In our second iteration, following correct naming of a country, the user then also has the option to the name the capital city of the said country. The user can skip this or take on this challenge for extra points! However, getting the capital city wrong would result in loss!
+![game_prog](https://user-images.githubusercontent.com/56037686/129882270-0609ddc9-8f16-4d1e-9215-9e008872eb82.PNG)
+
+After correctly naming a country, the player also has the option to name the capital city of their given country. If correct, they earn additional points, but if they get it wrong it is game over! As this is an optional question, they can skip if they don't know it.
+
+![game_cap](https://user-images.githubusercontent.com/56037686/129882400-2167fcd4-229c-4d23-aec3-bae79cfcf751.PNG)
+
+After answering correctly or skipping, the AI names another country beginning with the last letter of the player's named country. The user is then given the last letter of the AI's country to keep playing. This loop then continues, until the player either gets an answer wrong, or names a country that has already been played, both of which trigger the game over screen. 
+
+![game_over](https://user-images.githubusercontent.com/56037686/129882280-b07e046e-e2a9-48ba-9c97-83601671dab1.PNG)
 
 Some design decisions with regards to the game play:
-- Timed turns: the user has to return a response within a specified (i.e. 15 seconds) time period
+- Timed turns: the player has to return a response within a specified (i.e. 15 seconds) time period
 - Scoring: 10 points for naming a country correctly and 5 points for naming the capital city correctly
-- All countries named: if all countries have been named then the game finished and the user scores are tallied up
 - No choices left for letter: if all countries beginning with a specific letter have been named, the next letter alphabetically is presented instead as the next question
+- All countries named: if all countries have been named then the game finishes and the player scores are tallied up
 - Incorrect naming of country or capital city (including misspellings) results in loss of game
-- Played countries: at the end of the game, the user can view the list of countries that were played during the game
-- Possible countries: at the end of the game, the user can view a list of possible countries which they could have played for a letter if they got it wrong
-- Correct capital city: at the end of the game, a user who incorrectly named a capital city can view the correct response
-
+- Played countries: at the end of the game, the player can view the list of countries that were played during the game
+- Possible countries: at the end of the game, the player can view a list of possible countries they could have played for a letter if they got it wrong
+- Correct capital city: at the end of the game, a player who incorrectly named a capital city can view the correct response
 
 ## Data Architecture: How we set up our database
 
-In the first few days of the project, we began by setting up our database using SQLite due to our better understanding of the library. However, following some well-recieved feedback from our coach, the team then swiftly moved on to using PostgreSQL instead. This was, in part, to avoid any later complications that could have resulted by switching from SQLite to PostgreSQL.
+We used PostgreSQL for our database.
 
 In our database schema, we decided on using five tables:
-- countries: to include the country names, their capital cities and flag url links
-- users: to store user email, username and encrypted passwords
-- sessions: to store cookies as uuids
-- current_games: to keep track of any current games including user details, the countries played, current score, etc.
-- finished_games: to store details of any finished games including user details, final score, etc.
+
+- countries: to include the country names, their capital cities, and flag image urls
+- users: to store user email, username, and encrypted passwords
+- sessions: for login tracking through cookies
+- current_games: to keep track of any current games (user details, the countries played, current score, date)
+- finished_games: to store details of any finished games (user details, final score, date)
 
 ### Countries data
 When it came to the data for all of the countries and their capital cities, we decided to use the [countries-now-space](https://countriesnow.space) API. This API was chosen because it provided more commonly known colloquial names of the countries, instead of their strictly official names, which many English speaking users may not be aware of. 
@@ -43,7 +51,7 @@ We also decided to change the name of a few countries to their more commonly-kno
 
 ### Deployment
 
-For our database, we used [ElephantSQL](https://www.elephantsql.com/) ...........
+For our database, we used [ElephantSQL](https://www.elephantsql.com/).
 
 ## Backend: How we set up our backend
 
@@ -53,11 +61,13 @@ We decided to simplify our main JS file for the backend by splitting up the func
 
 For user authentication, we used a third party module, [BCrypt](https://deno.land/x/bcrypt/mod.ts), to handle the user password hashing and for checking the password. 
 
-We used cookies in the backend for dealing with user authorisation, to keep track of currently logged in user, current games being played now, etc.
+We used cookies in the backend for dealing with user authorisation, to keep track of the currently logged-in user, current games being played now, etc.
+
+An interesting issue arose in that we wanted non-registered users to be able to play our game, yet we were tracking the game in our database via the username. To address this, we created a temporary user account with a uuid as the username when the 'Play Game' button is clicked with no user logged in. This temporary user can be upgraded to a full account with a proper username on the game end screen to save their score. To avoid polluting our users table with countless temporary users that would never be used again, temporary users older than a day are deleted whenever the 'Play Game' button is clicked.
 
 ### Deployment
 
-For our backend, we used [heroku](https://heroku.com/home) ...........
+For our backend, we used [heroku](https://heroku.com/home).
 
 ## Frontend: How we set up our frontend
 
@@ -70,7 +80,10 @@ Some of the packages we used (for installation):
 
 ### Deployment
 
-For our frontend, we used [netlify](https://www.netlify.com) ...........
+For our frontend, we used [netlify](https://www.netlify.com).
+
+![game_prog](https://user-images.githubusercontent.com/56037686/129882236-2e1804f1-03f0-4c8e-9eaa-366cbc4cc99e.PNG)
+![game_prog](https://user-images.githubusercontent.com/56037686/129882258-b918f8a4-05d1-4319-b372-9473e80b1127.PNG)
 
 ## Extra: What if we had more time?
 
