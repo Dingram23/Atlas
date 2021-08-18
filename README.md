@@ -10,15 +10,15 @@ Our motivation behind the project was to build an enjoyable game that would chal
 
 The player is presented with a random letter of the alphabet (except 'X') and needs to type in a country beginning with that letter. If they are correct, they earn some points.
 
-![game_prog](https://user-images.githubusercontent.com/56037686/129882270-0609ddc9-8f16-4d1e-9215-9e008872eb82.PNG)
+![game_prog2](https://user-images.githubusercontent.com/56037686/129883181-682ff265-4003-4efc-905a-6b74c8dd7762.PNG)
 
 After correctly naming a country, the player also has the option to name the capital city of their given country. If correct, they earn additional points, but if they get it wrong it is game over! As this is an optional question, they can skip if they don't know it.
 
-![game_cap](https://user-images.githubusercontent.com/56037686/129882400-2167fcd4-229c-4d23-aec3-bae79cfcf751.PNG)
+![game_cap2](https://user-images.githubusercontent.com/56037686/129883188-4de92c09-f34c-4d32-a62a-a6afecd37a42.PNG)
 
 After answering correctly or skipping, the AI names another country beginning with the last letter of the player's named country. The user is then given the last letter of the AI's country to keep playing. This loop then continues, until the player either gets an answer wrong, or names a country that has already been played, both of which trigger the game over screen. 
 
-![game_over](https://user-images.githubusercontent.com/56037686/129882280-b07e046e-e2a9-48ba-9c97-83601671dab1.PNG)
+![game_over_2](https://user-images.githubusercontent.com/56037686/129883193-9dac5a6f-52fc-425c-999a-928e4ae55192.PNG)
 
 Some design decisions with regards to the game play:
 - Timed turns: the player has to return a response within a specified (i.e. 15 seconds) time period
